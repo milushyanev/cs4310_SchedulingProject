@@ -7,6 +7,7 @@ import java.nio.file.*;
 import java.io.*; 
 public class Main {
 static int listElementCount=60;
+private static Scanner sc;
 public static List<String> readFileInList(String fileName) 
 { 
 	//read from file using Collections to check if empty and if throw an error,else display data
@@ -124,7 +125,6 @@ static String getPath() {
 	System.out.println("Ex: C:\\Users\\Yanev\\eclipse-workspace\\cs4310_Project1\\job.txt");
 	System.out.println("\n\nEnter Path");
 	String userPath=path.nextLine();
-	path.close();
 	return userPath;
 }
 static void RoundRobin(List<String>l,int timeSlice) {
@@ -194,32 +194,29 @@ static void RoundRobin(List<String>l,int timeSlice) {
 	System.out.print("\n\n Round Robin with "+timeSlice+" minute slices Mean process turn‐around time = "+calcMeanProcessTimeAvg+"\n\n\n");
 };
 public static int InputValidation(int validationOne,int validationTwo) {
-	//simple verification that checks if input is between 2 values 
-	//and makes sure that input is integer
-	Scanner sc=new Scanner(System.in);
+	sc = new Scanner(System.in);
 	int number;
 	do {
 	  	    while (!sc.hasNextInt()) {
 	        System.out.println("That's not a number!");
-	        sc.next(); sc.next(); 
+	        sc.next();
 	    }
 	    number = sc.nextInt();
 	} while (number <validationOne || number>validationTwo);
-	sc.close();//if used more than one time, we have to delete sc.close();
+	
 	return number;
 	
 }
 public static void main(String[] args) {
 	
-	List<String> l = readFileInList("C:\\Users\\Yanev\\eclipse-workspace\\cs4310_Project1\\job.txt");	
+	//List<String> l = readFileInList("C:\\Users\\Yanev\\eclipse-workspace\\cs4310_Project1\\job.txt");	
 	
 	//if user doesnt add a proper path, the program will crash and not execute. 
 	//Please use the example provided or modify the above path with your path to save you time for testing purposes.
 	//Make sure that you comment out List<String> l = readFileInList(getPath()); if you want to use static path
-	//List<String> l = readFileInList(getPath());
 	
-	//modify Slice for testing purposes
-	int roundRobinSlice=5;
+	List<String> l = readFileInList(getPath());
+	
 	List<String> fixedList= new ArrayList<String>();
 	
 	for(int i=0;i<l.size();i++) {
@@ -227,18 +224,31 @@ public static void main(String[] args) {
 			fixedList.add(l.get(i));
 		}
 	}
-
-	System.out.println("\nPlease Choose 1. RoundRobin , 2. FCFS , 3.SJF");
-	System.out.print("\nOption->");
-	 int userInput=InputValidation(1,3);
-	 System.out.print("\n"+fixedList+"\n\n");
-		if (userInput==1) {
-		RoundRobin(fixedList,roundRobinSlice);	
-		}else if (userInput==2) {
-			FCFS(fixedList);
-		}else if(userInput==3) {
-			SJF(fixedList);
-		}
+	 System.out.println("\nPlease Choose 1. To Start, 2. To Terminate");
+	 System.out.print("\nOption->");
+	 int userInput1=InputValidation(1,2);
+	 if(userInput1==1) {
+		 do {
+			 System.out.println("\nPlease Choose 1. RoundRobin (2 slices),2. RoundRobin(5 slices) , 3. FCFS , 4.SJF");
+			 System.out.print("\nOption->");
+			 int userInput=InputValidation(1,4);
+			 System.out.print("\n"+fixedList+"\n\n");
+				if (userInput==1) {
+					RoundRobin(fixedList,2);	
+				}else if (userInput==2) {
+					RoundRobin(fixedList,5);
+				}else if (userInput==3) {
+					FCFS(fixedList);
+				}else if(userInput==4) {
+					SJF(fixedList);
+				}
+				 System.out.println("\nPlease Choose 1. To Continue, 2. To Terminate");
+				 System.out.print("\nOption->");
+				 userInput1=InputValidation(1,2);
+			
+		 	}while(userInput1!=2);
+	 }
+	 System.out.println("Goodbye!");
 	}
 
 } 
